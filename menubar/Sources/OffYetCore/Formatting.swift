@@ -42,7 +42,7 @@ public enum Formatting {
         countdownParts(totalSeconds).map { "\($0.value)\($0.unit)" }.joined(separator: " ")
     }
 
-    /// 顶栏日期：「10月9日 · 周四」
+    /// 顶栏日期：「10月9日 · 周五」
     public static func headDate(_ date: Date, calendar: Calendar = .current) -> String {
         let c = calendar.dateComponents([.month, .day, .weekday], from: date)
         let weeks = ["日", "一", "二", "三", "四", "五", "六"]
