@@ -25,7 +25,9 @@ public struct WorkSettings: Codable, Equatable {
     public static let standard = WorkSettings()
 
     public var isValid: Bool {
-        // NaN 参与 > 比较恒为 false，天然覆盖非法输入
-        endMin > startMin && monthlySalary > 0 && workDaysPerMonth > 0
+        // NaN 参与 > 比较恒为 false，天然覆盖非法输入；.infinity 能通过 > 0，
+        // 需 isFinite 显式守卫（对齐 web engine.js 的 Number.isFinite），否则 money 渲染越界
+        endMin > startMin && monthlySalary > 0 && monthlySalary.isFinite
+            && workDaysPerMonth > 0 && workDaysPerMonth.isFinite
     }
 }

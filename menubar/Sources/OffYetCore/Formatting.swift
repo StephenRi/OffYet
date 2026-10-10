@@ -12,6 +12,8 @@ public enum Formatting {
     }
 
     public static func money(_ n: Double) -> String {
+        // 纵深防御：非有限值经 String(format:) 会产生 "inf"，split 后 parts[1] 越界崩溃
+        guard n.isFinite else { return "--" }
         let fixed = String(format: "%.2f", abs(n))
         let parts = fixed.split(separator: ".")
         let sign = n < 0 ? "-" : ""

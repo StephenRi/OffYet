@@ -46,4 +46,17 @@ struct SettingsValidationTests {
         s.monthlySalary = Double.nan
         #expect(!s.isValid)
     }
+
+    // web engine.js 的 Number.isFinite 守卫：.infinity 会通过 > 0 但导致 money 渲染越界
+    @Test func invalidRejectsInfiniteSalary() {
+        var s = WorkSettings.standard
+        s.monthlySalary = .infinity
+        #expect(!s.isValid)
+    }
+
+    @Test func invalidRejectsInfiniteWorkDays() {
+        var s = WorkSettings.standard
+        s.workDaysPerMonth = .infinity
+        #expect(!s.isValid)
+    }
 }

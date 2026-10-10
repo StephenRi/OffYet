@@ -6,6 +6,7 @@ CONFIG=release
 TRIPLE_DIR="menubar/.build/arm64-apple-macosx/$CONFIG"
 APP="menubar/build/OffYet.app"
 VERSION=$(sed -n 's/^public let version = "\(.*\)"$/\1/p' menubar/Sources/OffYetCore/OffYetCore.swift)
+[ -n "$VERSION" ] || { echo "error: cannot parse version from OffYetCore.swift" >&2; exit 1; }
 
 echo "==> swift build -c $CONFIG"
 swift build -c $CONFIG --package-path menubar
