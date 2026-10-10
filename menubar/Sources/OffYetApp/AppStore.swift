@@ -1,5 +1,6 @@
 import Foundation
 import ServiceManagement
+import Combine
 import OffYetCore
 
 struct LoginItemService {
@@ -16,13 +17,20 @@ struct LoginItemService {
 @MainActor
 final class AppStore: ObservableObject {
     @Published private(set) var state: StoredState
+    @Published private(set) var now: Date = Date()
 
     private let store: StateStore
     private let login = LoginItemService()
+    private var ticker: AnyCancellable?
 
     init(store: StateStore = StateStore()) {
         self.store = store
         self.state = store.load()
+        ticker = Timer.publish(every: 1, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] date in
+                MainActor.assumeIsolated { self?.now = date }
+            }
     }
 
     var version: String { OffYetCore.version }

@@ -17,9 +17,8 @@ struct PanelView: View {
     }
 
     private var mainPanel: some View {
-        TimelineView(.periodic(from: .now, by: 0.25)) { context in
-            mainContent(now: store.currentDate(fallback: context.date))
-        }
+        // 不用 TimelineView：popover 内容视图会被 MenuBarExtra 保留，隐藏后仍 4Hz 重算耗 CPU；倒计时分、金额 1s 粒度足够
+        mainContent(now: store.currentDate(fallback: store.now))
     }
 
     @ViewBuilder

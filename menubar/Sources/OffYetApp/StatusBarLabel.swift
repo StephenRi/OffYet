@@ -5,11 +5,8 @@ struct StatusBarLabel: View {
     @ObservedObject var store: AppStore
 
     var body: some View {
-        TimelineView(.periodic(from: .now, by: 1)) { context in
-            content(now: store.currentDate(fallback: context.date))
-                // 强制每拍重建视图，规避 MenuBarExtra label 不刷新的平台怪癖
-                .id(context.date)
-        }
+        // label 内不可用 TimelineView：macOS 26 状态项会陷入无限重排（100% CPU），改由 AppStore 的 1s ticker 驱动
+        content(now: store.currentDate(fallback: store.now))
     }
 
     @ViewBuilder
