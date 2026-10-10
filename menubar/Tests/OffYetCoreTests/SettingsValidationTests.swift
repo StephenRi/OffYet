@@ -22,7 +22,7 @@ struct SettingsValidationTests {
         var s = WorkSettings.standard
         s.startMin = 1080; s.endMin = 540
         #expect(!s.isValid)
-        s.endMin = 540
+        s.startMin = 540
         #expect(!s.isValid)   // end == start 同样非法
     }
 
