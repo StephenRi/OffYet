@@ -23,7 +23,7 @@ struct PersistenceTests {
         s.settings.payDay = WorkSettings.payDayLastWorkday
         s.menuBarMode = .countdown
         s.simEnabled = true
-        s.simTime = Calendar.current.date(from: DateComponents(year: 2026, month: 10, day: 5, hour: 12))
+        s.simOffset = -3600
         s.launchAtLogin = true
         store.save(s)
         #expect(store.load() == s)
@@ -44,5 +44,20 @@ struct PersistenceTests {
 
     @Test func defaultMenuBarModeIsIcon() {
         #expect(StoredState().menuBarMode == .icon)
+    }
+
+    /// 旧版本存档含 simTime 键：解码时必须忽略未知键、其余设置不丢
+    @Test func legacySimTimeKeyIsIgnoredOnDecode() throws {
+        let defaults = makeDefaults()
+        let store = StateStore(defaults: defaults)
+        var s = StoredState()
+        s.settings.monthlySalary = 30000
+        s.simEnabled = true
+        var json = try #require(JSONSerialization.jsonObject(with: JSONEncoder().encode(s)) as? [String: Any])
+        json["simTime"] = 790_000_000
+        defaults.set(try JSONSerialization.data(withJSONObject: json), forKey: "offyet.settings.v1")
+        let loaded = store.load()
+        #expect(loaded == s)
+        #expect(loaded.simOffset == nil)
     }
 }

@@ -14,6 +14,7 @@ struct SettingsView: View {
     @State private var salaryText = ""
     @State private var daysText = ""
     @State private var simAt = Date()
+    @State private var loadedSimAt = Date()
 
     private var p: Palette { Palette.palette(colorScheme == .dark) }
 
@@ -96,7 +97,8 @@ struct SettingsView: View {
         let cal = Calendar.current
         startAt = dateFrom(minutes: draft.settings.startMin, calendar: cal)
         endAt = dateFrom(minutes: draft.settings.endMin, calendar: cal)
-        simAt = draft.simTime ?? Date()
+        simAt = draft.simOffset.map { Date().addingTimeInterval($0) } ?? Date()
+        loadedSimAt = simAt
         salaryText = trimDouble(draft.settings.monthlySalary)
         daysText = trimDouble(draft.settings.workDaysPerMonth)
         var comps = cal.dateComponents([.year, .month, .day], from: cal.startOfDay(for: Date()))
@@ -115,7 +117,12 @@ struct SettingsView: View {
         s.settings.workDaysPerMonth = Double(daysText) ?? 0
         s.settings.retirementDate = yyyyMMdd(retireAt)
         s.simEnabled = draft.simEnabled
-        s.simTime = draft.simEnabled ? simAt : nil
+        s.simOffset = StoredState.committedSimOffset(
+            enabled: draft.simEnabled,
+            pickedAt: simAt,
+            pickedAtLoad: loadedSimAt,
+            existing: draft.simOffset,
+            now: Date())
         guard s.settings.isValid else { return }
         store.apply(s)
         onBack()

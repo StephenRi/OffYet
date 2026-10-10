@@ -35,9 +35,9 @@ final class AppStore: ObservableObject {
 
     var version: String { OffYetCore.version }
 
-    /// 所有「当前时刻」的唯一入口：模拟时间开启时用 simTime
+    /// 所有「当前时刻」的唯一入口：模拟钟开启时以真实速率 1:1 流动（金额/倒计时持续变化）
     func currentDate(fallback: Date) -> Date {
-        state.simEnabled ? (state.simTime ?? fallback) : fallback
+        state.effectiveDate(fallback: fallback)
     }
 
     func apply(_ newState: StoredState) {
