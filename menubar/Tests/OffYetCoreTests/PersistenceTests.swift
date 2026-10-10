@@ -41,4 +41,8 @@ struct PersistenceTests {
         #expect(MenuBarMode.countdown.rawValue == "countdown")
         #expect(MenuBarMode.icon.rawValue == "icon")
     }
+
+    @Test func defaultMenuBarModeIsIcon() {
+        #expect(StoredState().menuBarMode == .icon)
+    }
 }

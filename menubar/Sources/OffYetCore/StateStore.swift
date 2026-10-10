@@ -8,7 +8,7 @@ public enum MenuBarMode: String, Codable, CaseIterable {
 
 public struct StoredState: Codable, Equatable {
     public var settings: WorkSettings = .standard
-    public var menuBarMode: MenuBarMode = .money
+    public var menuBarMode: MenuBarMode = .icon
     public var simEnabled: Bool = false
     public var simTime: Date?
     public var launchAtLogin: Bool = false
