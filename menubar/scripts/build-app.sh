@@ -31,6 +31,8 @@ sips -z 512 512  "$SRC" --out "$ICONSET/icon_512x512.png"   >/dev/null
 sips -z 1024 1024 "$SRC" --out "$ICONSET/icon_512x512@2x.png" >/dev/null
 iconutil -c icns "$ICONSET" -o "$APP/Contents/Resources/AppIcon.icns"
 
+cp assets/offyet-logo-tile.png "$APP/Contents/Resources/OffYetLogo.png"
+
 cat > "$APP/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">

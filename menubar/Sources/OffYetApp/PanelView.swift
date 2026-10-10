@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 import OffYetCore
 
@@ -43,9 +44,7 @@ struct PanelView: View {
 
     private func header(now: Date, p: Palette) -> some View {
         HStack(spacing: 10) {
-            Image(systemName: "sun.max.fill")
-                .font(.system(size: 20))
-                .foregroundStyle(p.accent, p.accent2)
+            logoView
             VStack(alignment: .leading, spacing: 1) {
                 HStack(alignment: .firstTextBaseline, spacing: 0) {
                     Text("下班了么").font(.system(size: 16, weight: .bold))
@@ -69,6 +68,25 @@ struct PanelView: View {
                     .overlay(Circle().stroke(p.border))
             }
             .buttonStyle(.plain)
+        }
+    }
+
+    // 面板是普通窗口（不受菜单栏状态项快照约束），可直接渲染彩色位图；资源由 build-app.sh 拷入 Contents/Resources
+    private static let logoImage: NSImage? = {
+        guard let url = Bundle.main.url(forResource: "OffYetLogo", withExtension: "png") else { return nil }
+        return NSImage(contentsOf: url)
+    }()
+
+    private var logoView: some View {
+        Group {
+            if let logo = Self.logoImage {
+                Image(nsImage: logo)
+                    .resizable()
+                    .interpolation(.high)
+                    .frame(width: 28, height: 28)
+            } else {
+                MenuBarGlyph()
+            }
         }
     }
 
