@@ -83,4 +83,8 @@ public enum Milestones {
         guard back.year == y, back.month == mo, back.day == d else { return nil }
         return dt
     }
+
+    public static func parseDateOnlyPublic(_ s: String) -> Date? {
+        parseDateOnly(s, calendar: .current)
+    }
 }
