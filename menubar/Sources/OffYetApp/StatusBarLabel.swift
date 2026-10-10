@@ -14,7 +14,7 @@ struct StatusBarLabel: View {
         let snap = EarningEngine.snapshot(at: now, settings: store.state.settings)
         switch store.state.menuBarMode {
         case .icon:
-            Image(systemName: "sun.max.fill")
+            MenuBarGlyph()
         case .money:
             switch snap.state {
             case .working, .afterWork:
