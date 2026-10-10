@@ -49,6 +49,16 @@ struct SettingsView: View {
                             Text("图标").tag(MenuBarMode.icon)
                         }.labelsHidden()
                     }
+                    field("刷新频率") {
+                        VStack(alignment: .leading, spacing: 3) {
+                            Stepper("每秒 \(draft.ticksPerSecond) 次",
+                                    value: $draft.ticksPerSecond,
+                                    in: StoredState.ticksPerSecondRange)
+                                .font(.system(size: 12))
+                            Text("频率越高，CPU 占用越高")
+                                .font(.system(size: 11)).foregroundColor(p.text2)
+                        }
+                    }
                     Toggle("开机自启", isOn: $draft.launchAtLogin)
                     Toggle("模拟时间（调试）", isOn: $draft.simEnabled)
                     if draft.simEnabled {

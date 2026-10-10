@@ -26,11 +26,7 @@ final class AppStore: ObservableObject {
     init(store: StateStore = StateStore()) {
         self.store = store
         self.state = store.load()
-        ticker = Timer.publish(every: 1, on: .main, in: .common)
-            .autoconnect()
-            .sink { [weak self] date in
-                MainActor.assumeIsolated { self?.now = date }
-            }
+        rescheduleTicker()
     }
 
     var version: String { OffYetCore.version }
@@ -44,5 +40,16 @@ final class AppStore: ObservableObject {
         state = newState
         store.save(newState)
         login.set(newState.launchAtLogin)
+        rescheduleTicker()
+    }
+
+    /// 每次设置保存后按最新频率重建 ticker，无需重启即可生效
+    private func rescheduleTicker() {
+        ticker?.cancel()
+        ticker = Timer.publish(every: state.tickInterval, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] date in
+                MainActor.assumeIsolated { self?.now = date }
+            }
     }
 }

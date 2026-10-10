@@ -5,7 +5,7 @@ struct StatusBarLabel: View {
     @ObservedObject var store: AppStore
 
     var body: some View {
-        // label 内不可用 TimelineView：macOS 26 状态项会陷入无限重排（100% CPU），改由 AppStore 的 1s ticker 驱动
+        // label 内不可用 TimelineView：macOS 26 状态项会陷入无限重排（100% CPU），改由 AppStore 的定时 ticker 驱动
         content(now: store.currentDate(fallback: store.now))
     }
 
