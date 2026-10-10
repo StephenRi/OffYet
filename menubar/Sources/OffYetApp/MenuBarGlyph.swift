@@ -52,14 +52,7 @@ struct MenuBarGlyph: View {
         ctx.addPath(g.horizonPath(in: box).cgPath)
         ctx.strokePath()
 
-        ctx.setLineWidth(g.handWidth)
-        ctx.addPath(g.handPath(in: box).cgPath)
-        ctx.strokePath()
-
         ctx.addPath(g.sunDomePath(in: box).cgPath)
-        ctx.fillPath(using: .evenOdd)
-
-        ctx.addPath(g.pivotPath(in: box).cgPath)
         ctx.fillPath()
 
         guard let cgImage = ctx.makeImage() else { fatalError("glyph image unavailable") }
@@ -75,20 +68,14 @@ private struct GlyphGeometry {
     let ringWidth: CGFloat = 1.2
     let tickWidth: CGFloat = 1.15
     let horizonWidth: CGFloat = 1.15
-    let handWidth: CGFloat = 1.6
 
     private let center = CGPoint(x: 9, y: 9)
     private let ringRadius: CGFloat = 6.9
     private let tickOuterR: CGFloat = 5.95
     private let tickInnerR: CGFloat = 4.9
     private let twelveTickInnerR: CGFloat = 5.1
-    private let horizonY: CGFloat = 13.9
-    private let sunRadius: CGFloat = 4
-    private let sunCenterY: CGFloat = 12.24
-    private let sliceHalfWidth: CGFloat = 0.8
-    private let sliceTopY: CGFloat = 9.4
-    private let sliceBottomY: CGFloat = 12.4
-    private let pivotRadius: CGFloat = 0.75
+    private let horizonY: CGFloat = 13.1
+    private let sunRadius: CGFloat = 4.7
 
     func ringPath(in rect: CGRect) -> Path {
         let s = scale(in: rect)
@@ -133,57 +120,21 @@ private struct GlyphGeometry {
         )
     }
 
-    func handPath(in rect: CGRect) -> Path {
-        let s = scale(in: rect)
-        return line(
-            from: CGPoint(x: center.x, y: 4.2 + handWidth / 2),
-            to: CGPoint(x: center.x, y: 9.2),
-            s: s,
-            in: rect
-        )
-    }
-
     func sunDomePath(in rect: CGRect) -> Path {
         let s = scale(in: rect)
-        let dy = horizonY - sunCenterY
-        let half = (sunRadius * sunRadius - dy * dy).squareRoot()
-        let sunCenter = point(CGPoint(x: center.x, y: sunCenterY), s: s, in: rect)
-        let horizonPoint = { (x: CGFloat) in
-            self.point(CGPoint(x: x, y: self.horizonY), s: s, in: rect)
-        }
-
+        let c = point(CGPoint(x: center.x, y: horizonY), s: s, in: rect)
+        let r = sunRadius * s
         var dome = Path()
-        dome.move(to: horizonPoint(center.x - half))
+        dome.move(to: CGPoint(x: c.x - r, y: c.y))
         dome.addArc(
-            center: sunCenter,
-            radius: sunRadius * s,
-            startAngle: .radians(atan2(dy, -half)),
-            endAngle: .radians(atan2(dy, half)),
+            center: c,
+            radius: r,
+            startAngle: .radians(.pi),
+            endAngle: .radians(0),
             clockwise: false
         )
         dome.closeSubpath()
-
-        let sliceTop = sliceTopY - sliceHalfWidth
-        let sliceTopLeft = point(CGPoint(x: center.x - sliceHalfWidth, y: sliceTop), s: s, in: rect)
-        let sliceBottomRight = point(CGPoint(x: center.x + sliceHalfWidth, y: sliceBottomY + sliceHalfWidth), s: s, in: rect)
-        let slice = Path(
-            roundedRect: CGRect(
-                x: sliceTopLeft.x,
-                y: sliceTopLeft.y,
-                width: sliceBottomRight.x - sliceTopLeft.x,
-                height: sliceBottomRight.y - sliceTopLeft.y
-            ),
-            cornerRadius: sliceHalfWidth * s
-        )
-        dome.addPath(slice)
         return dome
-    }
-
-    func pivotPath(in rect: CGRect) -> Path {
-        let s = scale(in: rect)
-        let c = point(center, s: s, in: rect)
-        let r = pivotRadius * s
-        return Path(ellipseIn: CGRect(x: c.x - r, y: c.y - r, width: r * 2, height: r * 2))
     }
 
     private func scale(in rect: CGRect) -> CGFloat {
