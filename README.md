@@ -4,6 +4,8 @@ macOS 菜单栏常驻应用：实时显示「今日已赚」和「下班倒计�
 
 [![Release](https://img.shields.io/github/release/StephenRi/OffYet.svg)](https://github.com/StephenRi/OffYet/releases)
 
+![OffYet 下拉面板](assets/screenshots/panel.png)
+
 ## 功能
 
 - **菜单栏三种显示模式**（点击切换）：实时金额（¥xx.xx 按设定频率跳动）/ 下班倒计时 / 品牌 logo 图标
