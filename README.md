@@ -1,5 +1,7 @@
 # OffYet · 下班了么
 
+> 打工人，吾日三省吾身：下班未至乎？周末未到乎？退休无期乎？
+
 macOS 菜单栏常驻应用：实时显示「今日已赚」和「下班倒计时」，一秒一秒陪你熬到下班。
 
 [![Release](https://img.shields.io/github/release/StephenRi/OffYet.svg)](https://github.com/StephenRi/OffYet/releases)
