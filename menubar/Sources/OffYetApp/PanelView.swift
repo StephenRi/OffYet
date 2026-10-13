@@ -33,6 +33,7 @@ struct PanelView: View {
             header(now: now, p: p)
             bodyCard(snap: snap, settings: s, now: now, p: p)
             milestones(now: now, settings: s, p: p)
+            sloganFooter(p: p)
         }
         .padding(14)
         .background(p.bgGradient.ignoresSafeArea())
@@ -220,6 +221,15 @@ struct PanelView: View {
             MilestoneCard(label: "距离退休", valueText: retireText, sub: "正在靠近自由",
                           icon: "hourglass", tint: p.hourglassIcon, tintBg: p.hourglassBg, palette: p)
         }
+    }
+
+    // MARK: 脚注 slogan
+
+    private func sloganFooter(p: Palette) -> some View {
+        Text("打工人，吾日三省吾身：下班未至乎？周末未到乎？退休无期乎？")
+            .font(.system(size: 10))
+            .foregroundColor(p.text2)
+            .multilineTextAlignment(.center)
     }
 
     static func grouped(_ s: String) -> String {
